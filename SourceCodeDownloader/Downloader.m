@@ -9,11 +9,9 @@
 #import "Downloader.h"
 #import "Ono.h"
 #import <pthread.h>
+#import "tarballs.h"
 
 NSString *opensource_apple_com_tarballs = @"https://opensource.apple.com/tarballs/";
-
-NSString *path = @"/Users/Bluelich/Downloads/apple.opensource/tarballs/";
-NSString *json = @"/Users/Bluelich/Desktop/SourceCodeDownloader/SourceCodeDownloader/tarballs.json";
 
 @interface NSArray (index)
 - (id)safe_objectAtIndex:(NSUInteger)index;
@@ -53,7 +51,15 @@ NSString *json = @"/Users/Bluelich/Desktop/SourceCodeDownloader/SourceCodeDownlo
 @implementation Downloader
 + (void)downloadViaJSON
 {
-    NSData *data = [NSData dataWithContentsOfFile:json];
+    NSString *path = [[[NSHomeDirectory() stringByAppendingPathComponent:@"Code"] stringByAppendingPathComponent:@"apple.opensource"] stringByAppendingPathComponent:@"tarballs"];
+    if (![NSFileManager.defaultManager fileExistsAtPath:path]) {
+        NSError *error = nil;
+        if (![NSFileManager.defaultManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:@{} error:&error]) {
+            printf("error:%s",error.description.UTF8String);
+            return;
+        }
+    }
+    NSData *data = [allTarballs dataUsingEncoding:NSUTF8StringEncoding];
     NSArray<NSString *> *tarballs = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     //因为CLT的某些原因,最好是一次只创建一个下载任务
     __block pthread_mutex_t lock;
@@ -61,13 +67,14 @@ NSString *json = @"/Users/Bluelich/Desktop/SourceCodeDownloader/SourceCodeDownlo
     [tarballs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         pthread_mutex_lock(&lock);
         NSString *fileName = [obj componentsSeparatedByString:@"/"].lastObject;
-        NSString *dstPath = [path stringByAppendingFormat:@"%@",fileName];
+        NSString *dstPath = [path stringByAppendingFormat:@"/%@",fileName];
         if (![NSFileManager.defaultManager fileExistsAtPath:dstPath]) {
-            printf("download started:%s\n\n",fileName.UTF8String);
+            printf("download started:%s\t",fileName.UTF8String);
             [[[NSURLSession sharedSession] downloadTaskWithURL:[NSURL URLWithString:obj] completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                 NSError *err = nil;
                 if (!location) {
-                    printf("");
+                    printf("tmp file location miss\n");
+                    return;
                 }
                 if (![NSFileManager.defaultManager moveItemAtURL:location toURL:[NSURL fileURLWithPath:dstPath] error:&err]) {
                     printf("error:%s\n\n",err.description.UTF8String);
@@ -77,7 +84,7 @@ NSString *json = @"/Users/Bluelich/Desktop/SourceCodeDownloader/SourceCodeDownlo
                 pthread_mutex_unlock(&lock);
             }]resume];
         }else{
-            printf("file exists:%s\n\n",dstPath.UTF8String);
+            printf("file exists:%s\n\n",fileName.UTF8String);
             pthread_mutex_unlock(&lock);
         }
     }];

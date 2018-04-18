@@ -26,6 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2AF22F0E20877BC2007D0119 /* tarballs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tarballs.h; sourceTree = "<group>"; };
 		B4B72E861FF4B90B00BBECCD /* SourceCodeDownloader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SourceCodeDownloader; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4B72E891FF4B90B00BBECCD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B4B72E901FF4B92B00BBECCD /* Downloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Downloader.h; sourceTree = "<group>"; };
@@ -36,7 +37,6 @@
 		B4B72E981FF4B97100BBECCD /* ONOXMLDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ONOXMLDocument.m; sourceTree = "<group>"; };
 		B4B72E991FF4B97100BBECCD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		B4B72E9C1FF4B99800BBECCD /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
-		B4B72E9E1FF4D28A00BBECCD /* tarballs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tarballs.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +74,7 @@
 				B4B72E891FF4B90B00BBECCD /* main.m */,
 				B4B72E901FF4B92B00BBECCD /* Downloader.h */,
 				B4B72E911FF4B92B00BBECCD /* Downloader.m */,
-				B4B72E9E1FF4D28A00BBECCD /* tarballs.json */,
+				2AF22F0E20877BC2007D0119 /* tarballs.h */,
 				B4B72E931FF4B97100BBECCD /* Ono */,
 			);
 			path = SourceCodeDownloader;
